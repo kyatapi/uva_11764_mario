@@ -68,6 +68,23 @@ int main(int argc, char **argv) {
 	cout.rdbuf(out.rdbuf()); //redirect std::cout to out.txt!
 #endif // !ONLINE_JUDGE
 
+	unsigned int test_count = 0;
+	cin >> test_count;
+	cin.ignore(1, '\n');
+
+	for (unsigned int t = 0; t < test_count; ++t) {
+		unsigned int wall_count = 0;
+		string wall_list = "";
+
+		cin >> wall_count;
+		cin.ignore(1, '\n');
+
+		getline(cin, wall_list);
+
+		pair<int, int> jumps = EvaluateJumps(wall_count, wall_list);
+		cout << "Case " << t + 1 << ": " << jumps.first << " " << jumps.second << endl;
+	}
+
 #ifndef ONLINE_JUDGE
 	::testing::InitGoogleTest(&argc, argv);
 	RUN_ALL_TESTS();
