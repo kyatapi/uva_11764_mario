@@ -24,6 +24,9 @@ pair<int, int> EvaluateJumps(const unsigned int wall_count, const string&  wall_
 		if (next_height > current_height) {
 			++high_jump_count;
 		}
+		else if (next_height < current_height) {
+			++low_jump_count;
+		}
 		current_height = next_height;
 	}
 	return pair<int, int>(high_jump_count, low_jump_count);
@@ -37,6 +40,12 @@ TEST(EvaluateJumpsTest, HandleAscendingWalls) {
 	ASSERT_EQ((pair<int, int>(1, 0)), EvaluateJumps(2, "1 2"));
 
 	ASSERT_EQ((pair<int, int>(4, 0)), EvaluateJumps(5, "1 3 5 7 9"));
+}
+
+TEST(EvaluateJumpsTest, HandleDescendingWalls) {
+	ASSERT_EQ((pair<int, int>(0, 1)), EvaluateJumps(2, "2 1"));
+
+	ASSERT_EQ((pair<int, int>(0, 4)), EvaluateJumps(5, "8 7 6 5 4"));
 }
 
 int main(int argc, char **argv) {
