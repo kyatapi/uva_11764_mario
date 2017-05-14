@@ -48,6 +48,14 @@ TEST(EvaluateJumpsTest, HandleDescendingWalls) {
 	ASSERT_EQ((pair<int, int>(0, 4)), EvaluateJumps(5, "8 7 6 5 4"));
 }
 
+TEST(EvaluateJumpsTest, HandleZigZaggingWalls) {
+	ASSERT_EQ((pair<int, int>(1, 1)), EvaluateJumps(3, "2 1 3"));
+
+	ASSERT_EQ((pair<int, int>(3, 4)), EvaluateJumps(8, "8 2 6 5 4 7 1 3"));
+
+	ASSERT_EQ((pair<int, int>(2, 1)), EvaluateJumps(6, "8 2 2 4 4 7"));
+}
+
 int main(int argc, char **argv) {
 #ifndef ONLINE_JUDGE
 	//Redirect stdin/out
