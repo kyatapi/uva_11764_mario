@@ -2,6 +2,7 @@
 #include <string>
 #include <utility>
 #include <iostream>
+#include <sstream>
 
 #ifndef ONLINE_JUDGE
 #include <fstream>
@@ -32,6 +33,8 @@ pair<int, int> EvaluateJumps(const unsigned int wall_count, const string&  wall_
 	return pair<int, int>(high_jump_count, low_jump_count);
 }
 
+#ifndef ONLINE_JUDGE
+
 TEST(EvaluateJumpsTest, HandleSingleWall) {
 	ASSERT_EQ((pair<int, int>(0, 0)), EvaluateJumps(1, "1"));
 }
@@ -55,6 +58,8 @@ TEST(EvaluateJumpsTest, HandleZigZaggingWalls) {
 
 	ASSERT_EQ((pair<int, int>(2, 1)), EvaluateJumps(6, "8 2 2 4 4 7"));
 }
+
+#endif // !ONLINE_JUDGE
 
 int main(int argc, char **argv) {
 #ifndef ONLINE_JUDGE
