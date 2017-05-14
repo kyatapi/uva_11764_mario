@@ -7,33 +7,40 @@
 #ifndef ONLINE_JUDGE
 #include <fstream>
 #include <gtest\gtest.h>
-#endif
+#endif // !ONLINE_JUDGE
 
 using namespace std;
 
-pair<int, int> EvaluateJumps(const unsigned int wall_count, const string&  wall_list) {
-	istringstream iss(wall_list);
-	unsigned int current_height = 0;
-	unsigned int next_height = 0;
-	unsigned int high_jump_count = 0;
-	unsigned int low_jump_count = 0;
+inline void init_io(streambuf **cinbuf, streambuf **coutbuf) {
+#ifndef ONLINE_JUDGE
+	//Redirect stdin/out
+	ifstream in("D:\\Project\\Mario\\Debug\\in.txt");
+	*cinbuf = cin.rdbuf(); //save old buf
+	cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
 
-	iss >> current_height;
+	ofstream out("D:\\Project\\Mario\\Debug\\out.txt");
+	*coutbuf = cout.rdbuf(); //save old buf
+	cout.rdbuf(out.rdbuf()); //redirect std::cout to out.txt!
+#endif // !ONLINE_JUDGE
+}
 
-	for (unsigned int w = 1; w < wall_count; ++w) {
-		iss >> next_height;
-		if (next_height > current_height) {
-			++high_jump_count;
-		}
-		else if (next_height < current_height) {
-			++low_jump_count;
-		}
-		current_height = next_height;
-	}
-	return pair<int, int>(high_jump_count, low_jump_count);
+inline void uninit_io(streambuf *cinbuf, streambuf *coutbuf) {
+#ifndef ONLINE_JUDGE
+	cin.rdbuf(cinbuf);
+	cout.rdbuf(coutbuf);
+#endif // !ONLINE_JUDGE
+}
+
+inline void run_test(int argc, char **argv) {
+#ifndef ONLINE_JUDGE
+	::testing::InitGoogleTest(&argc, argv);
+	RUN_ALL_TESTS();;
+#endif // !ONLINE_JUDGE
 }
 
 #ifndef ONLINE_JUDGE
+
+pair<int, int> EvaluateJumps(const unsigned int, const string&);
 
 TEST(EvaluateJumpsTest, HandleSingleWall) {
 	ASSERT_EQ((pair<int, int>(0, 0)), EvaluateJumps(1, "1"));
@@ -61,17 +68,34 @@ TEST(EvaluateJumpsTest, HandleZigZaggingWalls) {
 
 #endif // !ONLINE_JUDGE
 
-int main(int argc, char **argv) {
-#ifndef ONLINE_JUDGE
-	//Redirect stdin/out
-	ifstream in("D:\\Project\\Mario\\Debug\\in.txt");
-	streambuf *cinbuf = cin.rdbuf(); //save old buf
-	cin.rdbuf(in.rdbuf()); //redirect std::cin to in.txt!
+pair<int, int> EvaluateJumps(const unsigned int wall_count, const string&  wall_list) {
+	istringstream iss(wall_list);
+	unsigned int current_height = 0;
+	unsigned int next_height = 0;
+	unsigned int high_jump_count = 0;
+	unsigned int low_jump_count = 0;
 
-	ofstream out("D:\\Project\\Mario\\Debug\\out.txt");
-	streambuf *coutbuf = cout.rdbuf(); //save old buf
-	cout.rdbuf(out.rdbuf()); //redirect std::cout to out.txt!
-#endif // !ONLINE_JUDGE
+	iss >> current_height;
+
+	for (unsigned int w = 1; w < wall_count; ++w) {
+		iss >> next_height;
+		if (next_height > current_height) {
+			++high_jump_count;
+		}
+		else if (next_height < current_height) {
+			++low_jump_count;
+		}
+		current_height = next_height;
+	}
+	return pair<int, int>(high_jump_count, low_jump_count);
+}
+
+int main(int argc, char **argv) {
+	streambuf *cinbuf = NULL;
+	streambuf *coutbuf = NULL;
+
+	init_io(&cinbuf, &coutbuf);
+	run_test(argc, argv);
 
 	unsigned int test_count = 0;
 	cin >> test_count;
@@ -90,13 +114,7 @@ int main(int argc, char **argv) {
 		cout << "Case " << t + 1 << ": " << jumps.first << " " << jumps.second << endl;
 	}
 
-#ifndef ONLINE_JUDGE
-	::testing::InitGoogleTest(&argc, argv);
-	RUN_ALL_TESTS();
-
-	cin.rdbuf(cinbuf);
-	cout.rdbuf(coutbuf);
-#endif // !ONLINE_JUDGE
+	uninit_io(cinbuf, coutbuf);
 
 	return 0;
 }
