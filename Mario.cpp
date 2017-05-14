@@ -11,11 +11,32 @@
 using namespace std;
 
 pair<int, int> EvaluateJumps(const unsigned int wall_count, const string&  wall_list) {
-	return pair<int, int>(0, 0);
+	istringstream iss(wall_list);
+	unsigned int current_height = 0;
+	unsigned int next_height = 0;
+	unsigned int high_jump_count = 0;
+	unsigned int low_jump_count = 0;
+
+	iss >> current_height;
+
+	for (unsigned int w = 1; w < wall_count; ++w) {
+		iss >> next_height;
+		if (next_height > current_height) {
+			++high_jump_count;
+		}
+		current_height = next_height;
+	}
+	return pair<int, int>(high_jump_count, low_jump_count);
 }
 
 TEST(EvaluateJumpsTest, HandleSingleWall) {
 	ASSERT_EQ((pair<int, int>(0, 0)), EvaluateJumps(1, "1"));
+}
+
+TEST(EvaluateJumpsTest, HandleAscendingWalls) {
+	ASSERT_EQ((pair<int, int>(1, 0)), EvaluateJumps(2, "1 2"));
+
+	ASSERT_EQ((pair<int, int>(4, 0)), EvaluateJumps(5, "1 3 5 7 9"));
 }
 
 int main(int argc, char **argv) {
